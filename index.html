@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body style="width: 100%">
 <h1>тестовый бот</h1>
 <div id="info" >
     <input id="innn" style="width: 90%" value=""/>
+    <input id="bot" style="width: 90%" value=""/>
 </div>
 <script>
   window.onload = () => {
     const frame = document.querySelector('#innn');
     frame.value = location.href;
+    const bot = document.querySelector('#bot');
+    bot.value = window.Telegram.WebApp.initData;
   }
 </script>
 </body>

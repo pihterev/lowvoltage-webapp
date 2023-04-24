@@ -1,2 +1,7 @@
 /node_modules/
 /package-lock.json
+/.idea/.gitignore
+/.idea/low-voltage-web-app.iml
+/.idea/modules.xml
+/.idea/php.xml
+/.idea/vcs.xml
