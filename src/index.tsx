@@ -7,7 +7,7 @@ import '@vkontakte/vkui/dist/components.css';
 import { App } from './components/App';
 
 ReactDOM.render(
-  <ConfigProvider platform={Platform.VKCOM} appearance="light">
+  <ConfigProvider platform={Platform.IOS} appearance="light">
     <AdaptivityProvider>
       <App />
     </AdaptivityProvider>
