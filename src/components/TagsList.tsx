@@ -1,8 +1,20 @@
-import { Panel } from '@vkontakte/vkui';
-import { Views } from './Types';
+import { Group, SimpleCell } from '@vkontakte/vkui';
+import { PropsTagsList, TagItem } from './Types';
+import { DeleteTagPopout } from './DeleteTagPopout';
+import * as React from 'react';
 
-export const TagsList = () => {
+export const TagsList = ({ tags, setPopout, saveInitialState }: PropsTagsList) => {
+
   return <>
-    <div>тут будет страница для управления тегами</div>
-  </>
+    <Group>
+      {tags.map((tag: TagItem) => {
+        return <SimpleCell
+          subtitle={tag.folder}
+          after={<DeleteTagPopout saveInitialState={saveInitialState} tag={tag} setPopout={setPopout} />}
+        >
+          {tag.title}
+        </SimpleCell>;
+      })}
+    </Group>
+  </>;
 };

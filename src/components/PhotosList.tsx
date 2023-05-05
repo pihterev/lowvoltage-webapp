@@ -1,9 +1,9 @@
 import { Button, ButtonGroup, Group, Image, Placeholder, RichCell } from '@vkontakte/vkui';
-import { PhotosListProps } from './Types';
+import { PropsPhotosList } from './Types';
 import { Icon56CameraOffOutline } from '@vkontakte/icons';
 import { langs } from '../langs/ru';
 
-export const PhotosList = (photosListProps: PhotosListProps) => {
+export const PhotosList = (photosListProps: PropsPhotosList) => {
   return <>
     {photosListProps.photos.length > 0 ?
       <Group>

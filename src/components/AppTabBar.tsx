@@ -4,10 +4,10 @@ import {
 } from '@vkontakte/vkui';
 import * as React from 'react';
 import { Icon28UserTagOutline, Icon28TagOutline } from '@vkontakte/icons';
-import { TabBarProps, Views } from './Types';
+import { PropsTabBar, Views } from './Types';
 import { langs } from '../langs/ru';
 
-export const AppTabBar = ({ activeStory, onStoryChange, photosListCounter }: TabBarProps) => {
+export const AppTabBar = ({ activeStory, onStoryChange, photosListCounter }: PropsTabBar) => {
   const indicator = photosListCounter > 0 ? <Counter size="s" mode="prominent">
     {photosListCounter}
   </Counter> : <></>;
