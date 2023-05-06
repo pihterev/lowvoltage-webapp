@@ -2,6 +2,7 @@ import { Button, ButtonGroup, Group, Image, Placeholder, RichCell } from '@vkont
 import { PropsPhotosList } from './Types';
 import { Icon56CameraOffOutline } from '@vkontakte/icons';
 import { langs } from '../langs/ru';
+import * as React from 'react';
 
 export const PhotosList = (photosListProps: PropsPhotosList) => {
   return <>

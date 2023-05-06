@@ -8,12 +8,17 @@ import { callMethod } from './Api';
 export const DeleteTagPopout = ({ tag, setPopout, saveInitialState }: PropsDeleteTagPopout) => {
   const deleteTag = async () => {
     const response = await callMethod(ApiEndpoints.DELETE_TAG, {
-      'method': 'POST',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ tag_id: tag.id }),
     });
+
+    if (response === null) {
+      return;
+    }
+
     const state = { ...response };
     state.loading = false;
     saveInitialState({ ...state });

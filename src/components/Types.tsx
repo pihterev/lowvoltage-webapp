@@ -6,12 +6,13 @@ export enum Views {
 }
 
 export enum Modals {
-  TAG_EDIT = 'tag_edit',
+  TAG_CREATE = 'tag_create',
 }
 
 export enum ApiEndpoints {
   GET_INITIAL_STATE = 'getInitialState',
   DELETE_TAG = 'deleteTag',
+  ADD_TAG = 'addTag',
 }
 
 export interface InitialState {
@@ -23,7 +24,6 @@ export interface InitialState {
 export interface PropsTagsList {
   tags: TagItem[];
   setPopout: Dispatch<any>;
-  onChangeTag: (e: any) => void;
   saveInitialState: Dispatch<InitialState>;
 }
 

@@ -1,13 +1,15 @@
-import { ApiMethodsEnum, InitialState } from './Types';
+import { ApiEndpoints, InitialState } from './Types';
 
 const apiHost = 'http://localhost:8085/';
 
-export const callMethod = async (method: ApiMethodsEnum): Promise<InitialState> => {
-  let response = await fetch(apiHost + method);
+export const callMethod = async (endpoint: ApiEndpoints, requestParams?: RequestInit): Promise<InitialState> => {
+  let response = await fetch(apiHost + endpoint, requestParams);
 
   if (response.ok) {
     return await response.json();
   } else {
-    alert('Ошибка API запроса: ' + response.status + '. Метод: ' + method);
+    alert('Ошибка API запроса: ' + response.status + '. Метод: ' + endpoint);
   }
+
+  return null;
 };
