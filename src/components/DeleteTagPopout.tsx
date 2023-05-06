@@ -47,10 +47,6 @@ export const DeleteTagPopout = ({ tag, setPopout, saveInitialState }: PropsDelet
     );
   };
 
-  React.useEffect(() => {
-    openDeletion();
-  }, []);
-
   return (<IconButton onClick={openDeletion}>
       <Icon28Delete />
     </IconButton>

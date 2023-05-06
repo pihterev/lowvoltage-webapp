@@ -13,4 +13,6 @@ export const langs = {
   tag_placeholder_title: 'Введите название тега',
   tag_placeholder_folder: 'Введите название папки на Яндекс.Диске',
   cancel_button: 'Отмена',
+  delete_tag_title: 'Удаление тега',
+  delete_tag_confirm: 'Вы уверены, что хотите удалить тег "{tag_name}"?',
 };
