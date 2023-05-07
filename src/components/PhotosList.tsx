@@ -4,17 +4,17 @@ import { Icon56CameraOffOutline } from '@vkontakte/icons';
 import { langs } from '../langs/ru';
 import * as React from 'react';
 
-export const PhotosList = (photosListProps: PropsPhotosList) => {
+export const PhotosList = ({ photos, selectTag }: PropsPhotosList) => {
   return <>
-    {photosListProps.photos.length > 0 ?
+    {photos.length > 0 ?
       <Group>
-        {photosListProps.photos.map(item => {
+        {photos.map(item => {
           return <RichCell
             before={<Image src={item.url} size={172} />}
             caption={item.uploaded_chat_date}
             actions={
               <ButtonGroup mode="horizontal" gap="s" stretched>
-                <Button mode="primary" size="s">
+                <Button onClick={() => {selectTag(item)}} mode="primary" size="s">
                   {langs.upload_to_yandex_disk_button}
                 </Button>
               </ButtonGroup>

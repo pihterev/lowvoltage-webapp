@@ -5,6 +5,7 @@ import '@vkontakte/vkui/dist/vkui.css';
 import '@vkontakte/vkui/dist/components.css';
 
 import { App } from './components/App';
+import { Telegram } from './components/Types';
 
 ReactDOM.render(
   <ConfigProvider platform={Platform.IOS} appearance="light">
@@ -13,4 +14,5 @@ ReactDOM.render(
     </AdaptivityProvider>
   </ConfigProvider>,
   document.getElementById('app'),
+  Telegram.WebApp.ready
 );
