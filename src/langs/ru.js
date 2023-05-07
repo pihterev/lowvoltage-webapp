@@ -1,7 +1,7 @@
 export const langs = {
   title: 'Панель управления',
   photos_list_title: 'Фотографии',
-  upload_to_yandex_disk_button: 'Загрузить на Яндекс.Диск',
+  upload_to_yandex_disk_button: 'Загрузить',
   go_to_yandex_disk_action: 'Перейти на Яндекс.Диск',
   placeholder_photos_list: 'Все фотографии из чата загружены на Яндекс.Диск',
   tags_list_title: 'Теги',
@@ -14,5 +14,7 @@ export const langs = {
   tag_placeholder_folder: 'Введите название папки на Яндекс.Диске',
   cancel_button: 'Отмена',
   delete_tag_title: 'Удаление тега',
+  select_tag_label: 'Тег для загрузки',
+  select_tag_placeholder: 'Не выбран тег',
   delete_tag_confirm: 'Вы уверены, что хотите удалить тег "{tag_name}"?',
 };
