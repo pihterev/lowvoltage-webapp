@@ -7,12 +7,14 @@ export enum Views {
 
 export enum Modals {
   TAG_CREATE = 'tag_create',
+  PHOTO_ITEM_SELECT_TAG = 'select_tag',
 }
 
 export enum ApiEndpoints {
   GET_INITIAL_STATE = 'getInitialState',
   DELETE_TAG = 'deleteTag',
   ADD_TAG = 'addTag',
+  UPLOAD_PHOTO = 'uploadPhoto',
 }
 
 export interface InitialState {
@@ -37,6 +39,7 @@ export interface PropsDeleteTagPopout {
 
 export interface PropsPhotosList {
   photos: PhotoItem[];
+  selectTag: (photoItem: PhotoItem) => void;
 }
 
 export interface PropsTabBar {
@@ -49,6 +52,12 @@ export interface PropsFormTag {
   tag: TagItem;
   saveTag: () => void;
   onChangeTag: (e: any) => void;
+}
+
+export interface PropsSelectTag {
+  savePhotoItem: () => void;
+  onSelectTag: (e: any) => void;
+  tags: TagItem[];
 }
 
 export interface TagItem {
@@ -67,3 +76,10 @@ export interface PhotoItem {
   tag_id: number;
   chat_id: string;
 }
+
+declare const window: Window &
+  typeof globalThis & {
+  Telegram: any
+};
+
+export const Telegram = window.Telegram;
