@@ -15,9 +15,10 @@ import {
   PanelHeaderButton,
 } from '@vkontakte/vkui';
 import { langs } from '../langs/ru.js';
-import { ApiEndpoints, InitialState, Views, Modals, TagItem } from './Types';
+import { ApiEndpoints, InitialState, Views, Modals, TagItem, PhotoItem, Telegram } from './Types';
 import { PhotosList } from './PhotosList';
 import { TagsList } from './TagsList';
+import { SelectTagForm } from './SelectTagForm';
 import { AppTabBar } from './AppTabBar';
 import * as React from 'react';
 import { callMethod } from './Api';
@@ -30,6 +31,7 @@ export const App = () => {
   const [activeStory, setActiveStory] = React.useState<Views>(Views.PHOTOS);
   const [activeModal, setActiveModal] = React.useState<Modals>(null);
   const [activeTag, setActiveTag] = React.useState<TagItem>(emptyTag);
+  const [activePhotoItem, setActivePhotoItem] = React.useState<PhotoItem>(null);
   const [initState, saveInitialState] = React.useState<InitialState>({ photos: [], tags: [], loading: true });
   const [popout, setPopout] = React.useState(null);
 
@@ -52,16 +54,22 @@ export const App = () => {
     setActiveTag({ ...activeTag });
   };
 
+  const onSelectTag = (e: any) => {
+    const photoItem = { ...activePhotoItem };
+    photoItem.tag_id = +e.target.value;
+    photoItem.uploaded_yandex_disk_author = Telegram.WebApp.initDataUnsafe.user.username;
+    setActivePhotoItem({ ...photoItem });
+  };
+
+  const clickSelectTag = (photoItem: PhotoItem) => {
+    setActiveModal(Modals.PHOTO_ITEM_SELECT_TAG);
+    setActivePhotoItem({ ...photoItem });
+  };
+
   const saveTag = async () => {
     initState.loading = true;
     saveInitialState({ ...initState });
-    const response = await callMethod(ApiEndpoints.ADD_TAG, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(activeTag),
-    });
+    const response = await callMethod(ApiEndpoints.ADD_TAG, { tag: { ...activeTag } });
 
     if (response === null) {
       initState.loading = false;
@@ -76,6 +84,24 @@ export const App = () => {
     setActiveModal(null);
   };
 
+  const savePhotoItem = async () => {
+    initState.loading = true;
+    saveInitialState({ ...initState });
+    const response = await callMethod(ApiEndpoints.UPLOAD_PHOTO, { photo: { ...activePhotoItem } });
+
+    if (response === null) {
+      initState.loading = false;
+      saveInitialState({ ...initState });
+      return;
+    }
+
+    const state = { ...response };
+    state.loading = false;
+    saveInitialState({ ...state });
+    setActivePhotoItem(null);
+    setActiveModal(null);
+  }
+
   const modal = (
     <ModalRoot activeModal={activeModal}>
       <ModalPage header={<ModalPageHeader
@@ -84,6 +110,14 @@ export const App = () => {
         </PanelHeaderButton>}
       >
       </ModalPageHeader>} hideCloseButton={true} id={Modals.TAG_CREATE}><EditTagForm onChangeTag={onChangeTag} saveTag={saveTag} tag={activeTag} /></ModalPage>
+      <ModalPage header={<ModalPageHeader
+        after={<PanelHeaderButton onClick={() => {setActiveModal(null);}}>
+          <Icon24Dismiss />
+        </PanelHeaderButton>}
+      >
+      </ModalPageHeader>} hideCloseButton={true} id={Modals.PHOTO_ITEM_SELECT_TAG}>
+        <SelectTagForm onSelectTag={onSelectTag} tags={initState.tags} savePhotoItem={savePhotoItem} />
+      </ModalPage>
     </ModalRoot>
   );
 
@@ -91,6 +125,8 @@ export const App = () => {
     const response = await callMethod(ApiEndpoints.GET_INITIAL_STATE);
 
     if (response === null) {
+      initState.loading = false;
+      saveInitialState({ ...initState });
       return;
     }
 
@@ -120,7 +156,7 @@ export const App = () => {
             <View id={Views.PHOTOS} activePanel={Views.PHOTOS}>
               <Panel id={Views.PHOTOS}>
                 <PanelHeader>{langs.photos_list_title}</PanelHeader>
-                <PhotosList photos={initState.photos || []} />
+                <PhotosList selectTag={clickSelectTag} photos={initState.photos || []} />
               </Panel>
             </View>
             <View id={Views.TAGS} activePanel={Views.TAGS}>
