@@ -103,9 +103,11 @@ export const App = () => {
   }
 
   const skipPhoto = async (photoItem : PhotoItem) => {
+    const photo = {...photoItem};
+    photo.uploaded_yandex_disk_author = Telegram.WebApp.initDataUnsafe.user.username;
     initState.loading = true;
     saveInitialState({ ...initState });
-    const response = await callMethod(ApiEndpoints.SKIP_PHOTO, { photo: { ...photoItem } });
+    const response = await callMethod(ApiEndpoints.SKIP_PHOTO, { photo: { ...photo } });
 
     if (response === null) {
       initState.loading = false;
