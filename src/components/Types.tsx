@@ -15,6 +15,7 @@ export enum ApiEndpoints {
   DELETE_TAG = 'deleteTag',
   ADD_TAG = 'addTag',
   UPLOAD_PHOTO = 'uploadPhoto',
+  SKIP_PHOTO = 'skipPhoto',
 }
 
 export interface InitialState {
@@ -40,6 +41,7 @@ export interface PropsDeleteTagPopout {
 export interface PropsPhotosList {
   photos: PhotoItem[];
   selectTag: (photoItem: PhotoItem) => void;
+  skipPhoto: (photoItem: PhotoItem) => void;
 }
 
 export interface PropsTabBar {

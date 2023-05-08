@@ -102,6 +102,22 @@ export const App = () => {
     setActiveModal(null);
   }
 
+  const skipPhoto = async (photoItem : PhotoItem) => {
+    initState.loading = true;
+    saveInitialState({ ...initState });
+    const response = await callMethod(ApiEndpoints.SKIP_PHOTO, { photo: { ...photoItem } });
+
+    if (response === null) {
+      initState.loading = false;
+      saveInitialState({ ...initState });
+      return;
+    }
+
+    const state = { ...response };
+    state.loading = false;
+    saveInitialState({ ...state });
+  }
+
   const modal = (
     <ModalRoot activeModal={activeModal}>
       <ModalPage header={<ModalPageHeader
@@ -156,7 +172,7 @@ export const App = () => {
             <View id={Views.PHOTOS} activePanel={Views.PHOTOS}>
               <Panel id={Views.PHOTOS}>
                 <PanelHeader>{langs.photos_list_title}</PanelHeader>
-                <PhotosList selectTag={clickSelectTag} photos={initState.photos || []} />
+                <PhotosList skipPhoto={skipPhoto} selectTag={clickSelectTag} photos={initState.photos || []} />
               </Panel>
             </View>
             <View id={Views.TAGS} activePanel={Views.TAGS}>

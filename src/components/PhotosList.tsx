@@ -4,7 +4,8 @@ import { Icon56CameraOffOutline } from '@vkontakte/icons';
 import { langs } from '../langs/ru';
 import * as React from 'react';
 
-export const PhotosList = ({ photos, selectTag }: PropsPhotosList) => {
+export const PhotosList = ({ photos, selectTag, skipPhoto }: PropsPhotosList) => {
+
   return <>
     {photos.length > 0 ?
       <Group>
@@ -16,6 +17,9 @@ export const PhotosList = ({ photos, selectTag }: PropsPhotosList) => {
               <ButtonGroup mode="horizontal" gap="s" stretched>
                 <Button onClick={() => {selectTag(item)}} mode="primary" size="s">
                   {langs.upload_to_yandex_disk_button}
+                </Button>
+                <Button onClick={() => {skipPhoto(item)}} mode="primary" size="s" appearance="negative">
+                  {langs.skip_button}
                 </Button>
               </ButtonGroup>
             }

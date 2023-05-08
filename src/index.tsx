@@ -14,5 +14,8 @@ ReactDOM.render(
     </AdaptivityProvider>
   </ConfigProvider>,
   document.getElementById('app'),
-  Telegram.WebApp.ready
+  () => {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+  },
 );
