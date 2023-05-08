@@ -1,6 +1,6 @@
-import { Button, ButtonGroup, Group, Image, Placeholder, RichCell } from '@vkontakte/vkui';
+import { Button, ButtonGroup, Group, Image, Placeholder, RichCell, IconButton } from '@vkontakte/vkui';
 import { PropsPhotosList } from './Types';
-import { Icon56CameraOffOutline } from '@vkontakte/icons';
+import { Icon28Delete, Icon28UploadOutline, Icon56CameraOffOutline } from '@vkontakte/icons';
 import { langs } from '../langs/ru';
 import * as React from 'react';
 
@@ -14,12 +14,16 @@ export const PhotosList = ({ photos, selectTag, skipPhoto }: PropsPhotosList) =>
             before={<Image src={item.url} size={172} />}
             caption={item.uploaded_chat_date}
             actions={
-              <ButtonGroup mode="horizontal" gap="s" stretched>
-                <Button onClick={() => {selectTag(item)}} mode="primary" size="s">
-                  {langs.upload_to_yandex_disk_button}
+              <ButtonGroup mode="horizontal" gap="m" stretched>
+                <Button onClick={() => {selectTag(item);}} mode="primary" size="s">
+                  <IconButton>
+                    <Icon28UploadOutline />
+                  </IconButton>
                 </Button>
-                <Button onClick={() => {skipPhoto(item)}} mode="primary" size="s" appearance="negative">
-                  {langs.skip_button}
+                <Button onClick={() => {skipPhoto(item);}} mode="primary" appearance="negative" size="s">
+                  <IconButton>
+                    <Icon28Delete />
+                  </IconButton>
                 </Button>
               </ButtonGroup>
             }
