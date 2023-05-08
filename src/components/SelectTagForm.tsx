@@ -18,6 +18,7 @@ export const SelectTagForm = ({ onSelectTag, tags, savePhotoItem }: PropsSelectT
         placeholder={langs.select_tag_placeholder}
         options={options}
         selectType="default"
+        searchable
         allowClearButton
         onChange={onSelectTag}
         renderOption={({ ...props }) => {
