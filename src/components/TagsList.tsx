@@ -13,7 +13,7 @@ export const TagsList = ({ tags, setPopout, saveInitialState }: PropsTagsList) =
           subtitle={tag.folder}
           after={<DeleteTagPopout saveInitialState={saveInitialState} tag={tag} setPopout={setPopout} />}
         >
-          <a target="_blank" href={langs.yandex_disk_folder_link + '/' + tag.folder}>{tag.title}</a>
+          <a target="_blank" href={langs.yandex_disk_folder_link + tag.folder}>{tag.title}</a>
         </SimpleCell>;
       })}
     </Group>
