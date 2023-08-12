@@ -1,0 +1,7 @@
+.PhotoItem--selected {
+  background: var(--vkui--color_text_tertiary--hover);
+}
+
+body #app .N8bri2mk8vtdvUQbN6d9 {
+  overflow-y: auto;
+}

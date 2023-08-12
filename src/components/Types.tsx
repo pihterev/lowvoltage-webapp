@@ -42,6 +42,8 @@ export interface PropsPhotosList {
   photos: PhotoItem[];
   selectTag: (photoItem: PhotoItem) => void;
   skipPhoto: (photoItem: PhotoItem) => void;
+  multiSelectPhoto: (photoItem: PhotoItem) => void;
+  selectedPhotos: Record<number, PhotoItem>;
 }
 
 export interface PropsTabBar {
@@ -77,6 +79,7 @@ export interface PhotoItem {
   uploaded_yandex_disk_author: string;
   tag_id: number;
   chat_id: string;
+  caption: string;
 }
 
 declare const window: Window &

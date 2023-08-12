@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { AdaptivityProvider, ConfigProvider, Platform } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import '@vkontakte/vkui/dist/components.css';
+import './components/PhotoItem.css';
 
 import { App } from './components/App';
 import { Telegram } from './components/Types';

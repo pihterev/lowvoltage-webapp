@@ -1,5 +1,6 @@
 import {
   AppRoot,
+  Button,
   Epic,
   Panel,
   PanelHeader,
@@ -34,6 +35,7 @@ export const App = () => {
   const [activePhotoItem, setActivePhotoItem] = React.useState<PhotoItem>(null);
   const [initState, saveInitialState] = React.useState<InitialState>({ photos: [], tags: [], loading: true });
   const [popout, setPopout] = React.useState(null);
+  const [selectedPhotos, setSelectedPhotos] = React.useState<Record<number, PhotoItem>>({});
 
   const showTagAddModal = (tag: TagItem) => {
     setActiveModal(Modals.TAG_CREATE);
@@ -55,10 +57,23 @@ export const App = () => {
   };
 
   const onSelectTag = (e: any) => {
-    const photoItem = { ...activePhotoItem };
-    photoItem.tag_id = +e.target.value;
-    photoItem.uploaded_yandex_disk_author = Telegram.WebApp.initDataUnsafe.user.username;
-    setActivePhotoItem({ ...photoItem });
+    if (activePhotoItem) {
+      const photoItem = { ...activePhotoItem };
+      photoItem.tag_id = +e.target.value;
+      photoItem.uploaded_yandex_disk_author = Telegram?.WebApp?.initDataUnsafe?.user?.username || 'unknown';
+      setActivePhotoItem({ ...photoItem });
+    }
+
+    if (Object.keys(selectedPhotos).length) {
+      const photosItemsIds = Object.keys(selectedPhotos);
+
+      photosItemsIds.forEach((id) => {
+        selectedPhotos[+id].tag_id = +e.target.value;
+        selectedPhotos[+id].uploaded_yandex_disk_author  = Telegram?.WebApp?.initDataUnsafe?.user?.username || 'unknown';
+      })
+
+      setSelectedPhotos(selectedPhotos);
+    }
   };
 
   const clickSelectTag = (photoItem: PhotoItem) => {
@@ -87,23 +102,54 @@ export const App = () => {
   const savePhotoItem = async () => {
     initState.loading = true;
     saveInitialState({ ...initState });
-    const response = await callMethod(ApiEndpoints.UPLOAD_PHOTO, { photo: { ...activePhotoItem } });
 
-    if (response === null) {
-      initState.loading = false;
-      saveInitialState({ ...initState });
-      return;
+    if (activePhotoItem) {
+      const response = await callMethod(ApiEndpoints.UPLOAD_PHOTO, { photo: { ...activePhotoItem } });
+      if (response === null) {
+        initState.loading = false;
+        saveInitialState({ ...initState });
+        return;
+      }
+
+      const state = { ...response };
+      state.loading = false;
+      saveInitialState({ ...state });
     }
 
-    const state = { ...response };
-    state.loading = false;
-    saveInitialState({ ...state });
-    setActivePhotoItem(null);
-    setActiveModal(null);
-  }
+    if (Object.keys(selectedPhotos).length) {
+      const activePhotos = Object.values(selectedPhotos);
 
-  const skipPhoto = async (photoItem : PhotoItem) => {
-    const photo = {...photoItem};
+      for (let i = 0; i < activePhotos.length; i++ ) {
+        const response = await callMethod(ApiEndpoints.UPLOAD_PHOTO, { photo: { ...activePhotos[i] } });
+
+        if (response === null) {
+          initState.loading = false;
+          saveInitialState({ ...initState });
+          return;
+        }
+      }
+
+      await init();
+    }
+
+    setActiveModal(null);
+    setActivePhotoItem(null);
+    setSelectedPhotos({});
+  };
+
+  const multiSelectPhoto = (photoItem: PhotoItem) => {
+    const tmp = { ...selectedPhotos };
+    if (tmp[photoItem.id]) {
+      delete (tmp[photoItem.id]);
+    } else {
+      tmp[photoItem.id] = photoItem;
+    }
+
+    setSelectedPhotos(tmp);
+  };
+
+  const skipPhoto = async (photoItem: PhotoItem) => {
+    const photo = { ...photoItem };
     photo.uploaded_yandex_disk_author = Telegram.WebApp.initDataUnsafe.user.username;
     initState.loading = true;
     saveInitialState({ ...initState });
@@ -118,7 +164,7 @@ export const App = () => {
     const state = { ...response };
     state.loading = false;
     saveInitialState({ ...state });
-  }
+  };
 
   const modal = (
     <ModalRoot activeModal={activeModal}>
@@ -173,8 +219,16 @@ export const App = () => {
           >
             <View id={Views.PHOTOS} activePanel={Views.PHOTOS}>
               <Panel id={Views.PHOTOS}>
-                <PanelHeader>{langs.photos_list_title}</PanelHeader>
-                <PhotosList skipPhoto={skipPhoto} selectTag={clickSelectTag} photos={initState.photos || []} />
+
+                <PanelHeader
+                  before={Object.keys(selectedPhotos).length ?
+                    <PanelHeaderButton>
+                      <Button onClick={() => {
+                        setActiveModal(Modals.PHOTO_ITEM_SELECT_TAG);
+                      }} appearance="accent" mode={'secondary'}>{Object.keys(selectedPhotos).length}</Button>
+                    </PanelHeaderButton>
+                    : null}>{langs.photos_list_title}</PanelHeader>
+                <PhotosList selectedPhotos={selectedPhotos} multiSelectPhoto={multiSelectPhoto} skipPhoto={skipPhoto} selectTag={clickSelectTag} photos={initState.photos || []} />
               </Panel>
             </View>
             <View id={Views.TAGS} activePanel={Views.TAGS}>
