@@ -1,0 +1,45 @@
+.AlertItem {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding: 25px 0;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 20, 51, 0.12);
+}
+
+.AlertItem--info {
+    animation: color-blue 3s infinite; /* Параметры анимации */
+    box-shadow:#0077ff;
+}
+
+.AlertItem--alert {
+    animation: color-red 3s infinite; /* Параметры анимации */
+    box-shadow:#f12f2f;
+}
+
+@keyframes color-red {
+    0% {
+        background: #f12f2f;
+    }
+    50% {
+        background: rgba(241, 106, 106, 0.61);
+    }
+    100% {
+        background: #f12f2f;
+    }
+}
+
+@keyframes color-blue {
+    0% {
+        background: #0077ff;
+    }
+    50% {
+        background: rgba(55, 195, 246, 0.58);
+    }
+    100% {
+        background: #0077ff;
+    }
+}

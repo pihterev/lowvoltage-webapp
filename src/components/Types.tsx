@@ -3,6 +3,7 @@ import { Dispatch } from 'react';
 export enum Views {
   PHOTOS = 'photos',
   TAGS = 'tags',
+  ALERTS = 'alerts',
 }
 
 export enum Modals {
@@ -21,6 +22,7 @@ export enum ApiEndpoints {
 export interface InitialState {
   photos: PhotoItem[];
   tags: TagItem[];
+  alerts: AlertItem[];
   loading: boolean;
 }
 
@@ -28,6 +30,10 @@ export interface PropsTagsList {
   tags: TagItem[];
   setPopout: Dispatch<any>;
   saveInitialState: Dispatch<InitialState>;
+}
+
+export interface PropsAlertsList {
+  alerts: AlertItem[];
 }
 
 export interface PropsDeleteTagPopout {
@@ -48,6 +54,7 @@ export interface PropsPhotosList {
 
 export interface PropsTabBar {
   photosListCounter: number;
+  alerts: AlertItem[];
   activeStory: Views;
   onStoryChange: (e: any) => void;
 }
@@ -64,10 +71,22 @@ export interface PropsSelectTag {
   tags: TagItem[];
 }
 
+export enum StatusEnum {
+  DEFAULT = 'default',
+  INFO = 'info',
+  ALERT = 'alert'
+}
+
 export interface TagItem {
   id: number;
   title: string;
   folder: string;
+}
+
+export interface AlertItem {
+  id: number;
+  title: string;
+  status: StatusEnum;
 }
 
 export interface PhotoItem {

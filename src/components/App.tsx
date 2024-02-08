@@ -26,6 +26,7 @@ import { callMethod } from './Api';
 import { useEffect } from 'react';
 import { Icon24Dismiss, Icon28FolderSimplePlusOutline } from '@vkontakte/icons';
 import { EditTagForm } from './EditTagForm';
+import {AlertsList} from "./AlertsList";
 
 export const App = () => {
   const emptyTag = { title: '', folder: '', id: 0 };
@@ -33,7 +34,7 @@ export const App = () => {
   const [activeModal, setActiveModal] = React.useState<Modals>(null);
   const [activeTag, setActiveTag] = React.useState<TagItem>(emptyTag);
   const [activePhotoItem, setActivePhotoItem] = React.useState<PhotoItem>(null);
-  const [initState, saveInitialState] = React.useState<InitialState>({ photos: [], tags: [], loading: true });
+  const [initState, saveInitialState] = React.useState<InitialState>({photos: [], tags: [], alerts: [], loading: true});
   const [popout, setPopout] = React.useState(null);
   const [selectedPhotos, setSelectedPhotos] = React.useState<Record<number, PhotoItem>>({});
 
@@ -199,7 +200,13 @@ export const App = () => {
     saveInitialState({ ...state });
   }
 
-  useEffect(() => {init();}, []);
+  useEffect(() => {
+    init();
+
+    setInterval(() => {
+      init();
+    }, 10000);
+  }, []);
 
   const onStoryChange = (e: any) => setActiveStory(e.currentTarget.dataset.story);
 
@@ -214,7 +221,8 @@ export const App = () => {
           <Epic
             activeStory={activeStory}
             tabbar={
-              <AppTabBar onStoryChange={onStoryChange} photosListCounter={initState.photos ? initState.photos.length : 0} activeStory={activeStory} />
+              <AppTabBar alerts={initState.alerts} onStoryChange={onStoryChange}
+                         photosListCounter={initState.photos ? initState.photos.length : 0} activeStory={activeStory}/>
             }
           >
             <View id={Views.PHOTOS} activePanel={Views.PHOTOS}>
@@ -239,6 +247,12 @@ export const App = () => {
                   </IconButton>
                 </PanelHeaderSubmit>}>{langs.tags_list_title}</PanelHeader>
                 <TagsList saveInitialState={saveInitialState} setPopout={setPopout} tags={initState.tags} />
+              </Panel>
+            </View>
+            <View id={Views.ALERTS} activePanel={Views.ALERTS}>
+              <Panel id={Views.ALERTS}>
+                <PanelHeader>{langs.alerts_list_title}</PanelHeader>
+                <AlertsList alerts={initState.alerts}/>
               </Panel>
             </View>
           </Epic>

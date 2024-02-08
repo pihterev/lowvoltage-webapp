@@ -4,6 +4,7 @@ import { AdaptivityProvider, ConfigProvider, Platform } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import '@vkontakte/vkui/dist/components.css';
 import './components/PhotoItem.css';
+import './components/AlertItem.css';
 
 import { App } from './components/App';
 import { Telegram } from './components/Types';

@@ -5,6 +5,7 @@ export const langs = {
   go_to_yandex_disk_action: 'Перейти на Яндекс.Диск',
   placeholder_photos_list: 'Все фотографии из чата загружены на Яндекс.Диск',
   tags_list_title: 'Теги',
+  alerts_list_title: 'Аварии',
   yandex_disk_folder_link: 'https://disk.yandex.ru/client/disk/Фото объектов/',
   tag_label_title: 'Название',
   tag_label_folder: 'Папка',
