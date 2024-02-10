@@ -8,6 +8,7 @@ export enum Views {
 
 export enum Modals {
   TAG_CREATE = 'tag_create',
+  ZABBIX_TAG_CREATE = 'zabbix_create',
   PHOTO_ITEM_SELECT_TAG = 'select_tag',
 }
 
@@ -15,6 +16,7 @@ export enum ApiEndpoints {
   GET_INITIAL_STATE = 'getInitialState',
   DELETE_TAG = 'deleteTag',
   ADD_TAG = 'addTag',
+  ADD_ZABBIX_TAG = 'addZabbixTag',
   UPLOAD_PHOTO = 'uploadPhoto',
   SKIP_PHOTO = 'skipPhoto',
 }
@@ -65,6 +67,12 @@ export interface PropsFormTag {
   onChangeTag: (e: any) => void;
 }
 
+export interface PropsFormZabbixTag {
+  tag: ZabbixTagItem;
+  saveTag: () => void;
+  onChangeTag: (e: any) => void;
+}
+
 export interface PropsSelectTag {
   savePhotoItem: () => void;
   onSelectTag: (e: any) => void;
@@ -81,6 +89,11 @@ export interface TagItem {
   id: number;
   title: string;
   folder: string;
+}
+
+export interface ZabbixTagItem {
+  id: number;
+  title: string;
 }
 
 export interface AlertItem {
