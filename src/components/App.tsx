@@ -14,29 +14,65 @@ import {
   ModalPage,
   ModalPageHeader,
   PanelHeaderButton,
+  PanelHeaderBack
 } from '@vkontakte/vkui';
-import { langs } from '../langs/ru.js';
-import { ApiEndpoints, InitialState, Views, Modals, TagItem, PhotoItem, Telegram } from './Types';
-import { PhotosList } from './PhotosList';
-import { TagsList } from './TagsList';
-import { SelectTagForm } from './SelectTagForm';
-import { AppTabBar } from './AppTabBar';
+import {langs} from '../langs/ru.js';
+import {
+  ApiEndpoints,
+  InitialState,
+  Views,
+  Modals,
+  TagItem,
+  PhotoItem,
+  Telegram,
+  ZabbixTagItem,
+  AlertItem
+} from './Types';
+import {PhotosList} from './PhotosList';
+import {TagsList} from './TagsList';
+import {SelectTagForm} from './SelectTagForm';
+import {AppTabBar} from './AppTabBar';
 import * as React from 'react';
-import { callMethod } from './Api';
-import { useEffect } from 'react';
-import { Icon24Dismiss, Icon28FolderSimplePlusOutline } from '@vkontakte/icons';
-import { EditTagForm } from './EditTagForm';
+import {callMethod} from './Api';
+import {useEffect} from 'react';
+import {
+  Icon24AddAwardsOutline,
+  Icon24Dismiss,
+  Icon28FolderSimplePlusOutline
+} from '@vkontakte/icons';
+import {EditTagForm} from './EditTagForm';
 import {AlertsList} from "./AlertsList";
+import {EditZabbixTagForm} from "./EditZabbixTagForm";
+import {HostsList} from "./HostsList";
 
 export const App = () => {
   const emptyTag = { title: '', folder: '', id: 0 };
+  const emptyZabbixTag = {title: '', id: 0};
   const [activeStory, setActiveStory] = React.useState<Views>(Views.PHOTOS);
+  const [activePanel, setActivePanel] = React.useState<Views>(Views.ALERTS);
   const [activeModal, setActiveModal] = React.useState<Modals>(null);
   const [activeTag, setActiveTag] = React.useState<TagItem>(emptyTag);
+  const [activeAlert, setActiveAlert] = React.useState<AlertItem | null>(null);
+  const [activeZabbixTag, setActiveZabbixTag] = React.useState<ZabbixTagItem>(emptyZabbixTag);
   const [activePhotoItem, setActivePhotoItem] = React.useState<PhotoItem>(null);
   const [initState, saveInitialState] = React.useState<InitialState>({photos: [], tags: [], alerts: [], loading: true});
   const [popout, setPopout] = React.useState(null);
   const [selectedPhotos, setSelectedPhotos] = React.useState<Record<number, PhotoItem>>({});
+
+  const showZabbixTagAddModal = (zabbixTag: ZabbixTagItem) => {
+    setActiveModal(Modals.ZABBIX_TAG_CREATE);
+    setActiveZabbixTag(zabbixTag);
+  };
+
+  const onChangeZabbixTag = (e: any) => {
+    const {name, value} = e.target;
+
+    if (name === 'title') {
+      activeZabbixTag.title = value;
+    }
+
+    setActiveZabbixTag({...activeZabbixTag});
+  };
 
   const showTagAddModal = (tag: TagItem) => {
     setActiveModal(Modals.TAG_CREATE);
@@ -61,7 +97,7 @@ export const App = () => {
     if (activePhotoItem) {
       const photoItem = { ...activePhotoItem };
       photoItem.tag_id = +e.target.value;
-      photoItem.uploaded_yandex_disk_author = Telegram?.WebApp?.initDataUnsafe?.user?.username || 'unknown';
+      photoItem.uploaded_yandex_disk_author = getTelegramUserName();
       setActivePhotoItem({ ...photoItem });
     }
 
@@ -70,12 +106,16 @@ export const App = () => {
 
       photosItemsIds.forEach((id) => {
         selectedPhotos[+id].tag_id = +e.target.value;
-        selectedPhotos[+id].uploaded_yandex_disk_author  = Telegram?.WebApp?.initDataUnsafe?.user?.username || 'unknown';
+        selectedPhotos[+id].uploaded_yandex_disk_author  = getTelegramUserName()
       })
 
       setSelectedPhotos(selectedPhotos);
     }
   };
+
+  const getTelegramUserName = () => {
+    return Telegram?.WebApp?.initDataUnsafe?.user?.username || 'unknown';
+  }
 
   const clickSelectTag = (photoItem: PhotoItem) => {
     setActiveModal(Modals.PHOTO_ITEM_SELECT_TAG);
@@ -99,6 +139,34 @@ export const App = () => {
     setActiveTag(emptyTag);
     setActiveModal(null);
   };
+
+  const saveZabbixTag = async () => {
+    initState.loading = true;
+    saveInitialState({...initState});
+    const response = await callMethod(ApiEndpoints.ADD_ZABBIX_TAG, {tag: {...activeZabbixTag}});
+
+    if (response === null) {
+      initState.loading = false;
+      saveInitialState({...initState});
+      return;
+    }
+
+    const state = {...response};
+    state.loading = false;
+    saveInitialState({...state});
+    setActiveZabbixTag(emptyZabbixTag);
+    setActiveModal(null);
+  };
+
+  const onSelectAlert = (alert: AlertItem | null) => {
+    if (alert === null) {
+      setActivePanel(Views.ALERTS);
+    } else {
+      setActivePanel(Views.PROBLEMS);
+    }
+
+    setActiveAlert(alert);
+  }
 
   const savePhotoItem = async () => {
     initState.loading = true;
@@ -151,7 +219,7 @@ export const App = () => {
 
   const skipPhoto = async (photoItem: PhotoItem) => {
     const photo = { ...photoItem };
-    photo.uploaded_yandex_disk_author = Telegram.WebApp.initDataUnsafe.user.username;
+    photo.uploaded_yandex_disk_author = getTelegramUserName();
     initState.loading = true;
     saveInitialState({ ...initState });
     const response = await callMethod(ApiEndpoints.SKIP_PHOTO, { photo: { ...photo } });
@@ -174,7 +242,18 @@ export const App = () => {
           <Icon24Dismiss />
         </PanelHeaderButton>}
       >
-      </ModalPageHeader>} hideCloseButton={true} id={Modals.TAG_CREATE}><EditTagForm onChangeTag={onChangeTag} saveTag={saveTag} tag={activeTag} /></ModalPage>
+      </ModalPageHeader>} hideCloseButton={true} id={Modals.TAG_CREATE}>
+        <EditTagForm onChangeTag={onChangeTag} saveTag={saveTag} tag={activeTag}/>
+      </ModalPage>
+      <ModalPage header={<ModalPageHeader
+          after={<PanelHeaderButton onClick={() => {
+            setActiveModal(null);
+          }}>
+            <Icon24Dismiss/>
+          </PanelHeaderButton>}
+      >
+      </ModalPageHeader>} hideCloseButton={true} id={Modals.ZABBIX_TAG_CREATE}><EditZabbixTagForm
+          onChangeTag={onChangeZabbixTag} saveTag={saveZabbixTag} tag={activeZabbixTag}/></ModalPage>
       <ModalPage header={<ModalPageHeader
         after={<PanelHeaderButton onClick={() => {setActiveModal(null);}}>
           <Icon24Dismiss />
@@ -201,10 +280,14 @@ export const App = () => {
   }
 
   useEffect(() => {
-    init();
+    init().then(r => {
+      console.log(r)
+    });
 
     setInterval(() => {
-      init();
+      init().then(r => {
+        console.log(r)
+      });
     }, 10000);
   }, []);
 
@@ -227,7 +310,6 @@ export const App = () => {
           >
             <View id={Views.PHOTOS} activePanel={Views.PHOTOS}>
               <Panel id={Views.PHOTOS}>
-
                 <PanelHeader
                   before={Object.keys(selectedPhotos).length ?
                     <PanelHeaderButton>
@@ -249,10 +331,22 @@ export const App = () => {
                 <TagsList saveInitialState={saveInitialState} setPopout={setPopout} tags={initState.tags} />
               </Panel>
             </View>
-            <View id={Views.ALERTS} activePanel={Views.ALERTS}>
+            <View id={Views.ALERTS} activePanel={activePanel}>
               <Panel id={Views.ALERTS}>
-                <PanelHeader>{langs.alerts_list_title}</PanelHeader>
-                <AlertsList alerts={initState.alerts}/>
+                <PanelHeader before={<PanelHeaderSubmit onClick={() => {
+                  showZabbixTagAddModal(emptyZabbixTag);
+                }}>
+                  <IconButton>
+                    <Icon24AddAwardsOutline/>
+                  </IconButton>
+                </PanelHeaderSubmit>}>{langs.alerts_list_title}</PanelHeader>
+                <AlertsList onClick={onSelectAlert} alerts={initState.alerts}/>
+              </Panel>
+              <Panel id={Views.PROBLEMS}>
+                <PanelHeader before={<PanelHeaderBack onClick={() => onSelectAlert(null)}/>}>
+                  {activeAlert ? activeAlert.title : langs.problems_list_title}
+                </PanelHeader>
+                <HostsList alert={activeAlert}/>
               </Panel>
             </View>
           </Epic>

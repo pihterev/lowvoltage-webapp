@@ -5,6 +5,7 @@ import '@vkontakte/vkui/dist/vkui.css';
 import '@vkontakte/vkui/dist/components.css';
 import './components/PhotoItem.css';
 import './components/AlertItem.css';
+import './components/HostItem.css';
 
 import { App } from './components/App';
 import { Telegram } from './components/Types';

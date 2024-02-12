@@ -1,9 +1,9 @@
-import { Alert, IconButton } from '@vkontakte/vkui';
+import {Alert, IconButton} from '@vkontakte/vkui';
 import * as React from 'react';
-import { Icon28Delete } from '@vkontakte/icons';
-import { ApiEndpoints, PropsDeleteTagPopout } from './Types';
-import { langs } from '../langs/ru';
-import { callMethod } from './Api';
+import {Icon28Delete} from '@vkontakte/icons';
+import {ApiEndpoints, PropsDeleteTagPopout} from './Types';
+import {langs} from '../langs/ru';
+import {callMethod} from './Api';
 
 export const DeleteTagPopout = ({ tag, setPopout, saveInitialState }: PropsDeleteTagPopout) => {
   const deleteTag = async () => {
@@ -35,7 +35,7 @@ export const DeleteTagPopout = ({ tag, setPopout, saveInitialState }: PropsDelet
             title: langs.delete_tag_button,
             autoClose: true,
             mode: 'destructive',
-            action: () => {deleteTag();},
+            action: () => {deleteTag().then(r => {console.log(r)});},
           },
         ]}
         actionsLayout="horizontal"

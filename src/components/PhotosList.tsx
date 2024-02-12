@@ -1,7 +1,7 @@
-import { Button, ButtonGroup, Group, Image, Placeholder, RichCell, IconButton } from '@vkontakte/vkui';
-import { PropsPhotosList } from './Types';
-import { Icon28Delete, Icon28UploadOutline, Icon56CameraOffOutline } from '@vkontakte/icons';
-import { langs } from '../langs/ru';
+import {Button, ButtonGroup, Group, Image, Placeholder, RichCell, IconButton} from '@vkontakte/vkui';
+import {PropsPhotosList} from './Types';
+import {Icon28Delete, Icon28UploadOutline, Icon56CameraOffOutline} from '@vkontakte/icons';
+import {langs} from '../langs/ru';
 import * as React from 'react';
 
 export const PhotosList = ({ photos, selectTag, skipPhoto, multiSelectPhoto, selectedPhotos }: PropsPhotosList) => {

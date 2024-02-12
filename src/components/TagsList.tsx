@@ -1,8 +1,8 @@
-import { Group, SimpleCell } from '@vkontakte/vkui';
-import { PropsTagsList, TagItem } from './Types';
-import { DeleteTagPopout } from './DeleteTagPopout';
+import {Group, SimpleCell} from '@vkontakte/vkui';
+import {PropsTagsList, TagItem} from './Types';
+import {DeleteTagPopout} from './DeleteTagPopout';
 import * as React from 'react';
-import { langs } from '../langs/ru';
+import {langs} from '../langs/ru';
 
 export const TagsList = ({ tags, setPopout, saveInitialState }: PropsTagsList) => {
 

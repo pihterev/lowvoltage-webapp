@@ -1,6 +1,6 @@
-import { PropsFormTag } from './Types';
-import { langs } from '../langs/ru';
-import { FormLayout, FormItem, Button, Input } from '@vkontakte/vkui';
+import {PropsFormTag} from './Types';
+import {langs} from '../langs/ru';
+import {FormLayout, FormItem, Button, Input} from '@vkontakte/vkui';
 
 export const EditTagForm = ({ tag, saveTag, onChangeTag }: PropsFormTag) => {
   return <FormLayout>

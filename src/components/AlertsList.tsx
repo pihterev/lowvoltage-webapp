@@ -2,7 +2,7 @@ import {Card, CardGrid, Group} from '@vkontakte/vkui';
 import {AlertItem, PropsAlertsList, StatusEnum} from './Types';
 import * as React from 'react';
 
-export const AlertsList = ({alerts}: PropsAlertsList) => {
+export const AlertsList = ({alerts, onClick}: PropsAlertsList) => {
   alerts.sort((a, b) => {
     if (b.status === StatusEnum.DEFAULT && a.status !== StatusEnum.DEFAULT) {
       return -1;
@@ -27,7 +27,9 @@ export const AlertsList = ({alerts}: PropsAlertsList) => {
     <Group>
       <CardGrid size="m">
         {alerts.map((alert: AlertItem) => {
-          return <Card>
+          return <Card onClick={() => {
+            onClick(alert);
+          }}>
             <div className={"AlertItem AlertItem--" + alert.status}>{alert.title}</div>
           </Card>;
         })}

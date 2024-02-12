@@ -1,4 +1,4 @@
-import { ApiEndpoints, InitialState, Telegram } from './Types';
+import {ApiEndpoints, InitialState, Telegram} from './Types';
 
 const apiHost = 'https://functions.yandexcloud.net/d4eb7s840vgko3bs9nj4';
 

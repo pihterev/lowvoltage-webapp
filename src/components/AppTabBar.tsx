@@ -1,4 +1,4 @@
-import {Counter, Tabbar, TabbarItem,} from '@vkontakte/vkui';
+import {Counter, Tabbar, TabbarItem} from '@vkontakte/vkui';
 import * as React from 'react';
 import {Icon28ErrorCircleOutline, Icon28TagOutline, Icon28UserTagOutline} from '@vkontakte/icons';
 import {PropsTabBar, StatusEnum, Views} from './Types';

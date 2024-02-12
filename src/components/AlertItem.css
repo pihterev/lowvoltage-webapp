@@ -11,12 +11,12 @@
 }
 
 .AlertItem--info {
-    animation: color-blue 3s infinite; /* Параметры анимации */
+    animation: color-blue 3s infinite;
     box-shadow:#0077ff;
 }
 
 .AlertItem--alert {
-    animation: color-red 3s infinite; /* Параметры анимации */
+    animation: color-red 3s infinite;
     box-shadow:#f12f2f;
 }
 

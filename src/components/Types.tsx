@@ -1,9 +1,10 @@
-import { Dispatch } from 'react';
+import {Dispatch} from 'react';
 
 export enum Views {
   PHOTOS = 'photos',
   TAGS = 'tags',
   ALERTS = 'alerts',
+  PROBLEMS = 'problems',
 }
 
 export enum Modals {
@@ -14,6 +15,7 @@ export enum Modals {
 
 export enum ApiEndpoints {
   GET_INITIAL_STATE = 'getInitialState',
+  GET_HOSTS = 'getHosts',
   DELETE_TAG = 'deleteTag',
   ADD_TAG = 'addTag',
   ADD_ZABBIX_TAG = 'addZabbixTag',
@@ -26,6 +28,7 @@ export interface InitialState {
   tags: TagItem[];
   alerts: AlertItem[];
   loading: boolean;
+  hosts?: HostItem[];
 }
 
 export interface PropsTagsList {
@@ -36,6 +39,11 @@ export interface PropsTagsList {
 
 export interface PropsAlertsList {
   alerts: AlertItem[];
+  onClick: (alertItem: AlertItem | null) => void;
+}
+
+export interface PropsHostsList {
+  alert: AlertItem | null;
 }
 
 export interface PropsDeleteTagPopout {
@@ -85,6 +93,14 @@ export enum StatusEnum {
   ALERT = 'alert'
 }
 
+export enum SeverityEnum {
+  INFO = "1",
+  NOTICE = "2",
+  WARNING = "3",
+  ERROR = "4",
+  CRITICAL = "5"
+}
+
 export interface TagItem {
   id: number;
   title: string;
@@ -102,6 +118,14 @@ export interface AlertItem {
   status: StatusEnum;
 }
 
+export interface HostItem {
+  id: number;
+  title: string;
+  date: string;
+  name: string;
+  severity: SeverityEnum;
+}
+
 export interface PhotoItem {
   id: number;
   url: string;
@@ -116,7 +140,20 @@ export interface PhotoItem {
 
 declare const window: Window &
   typeof globalThis & {
-  Telegram: any
+  Telegram: ITelegram
 };
+
+interface ITelegram {
+  WebApp?: {
+    ready: () => void;
+    expand: () => void;
+    initData: string;
+    initDataUnsafe?: {
+      user?: {
+        username: string
+      }
+    };
+  }
+}
 
 export const Telegram = window.Telegram;
